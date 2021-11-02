@@ -8,7 +8,7 @@ const app = express();
 const mongoURL =
   "mongodb+srv://blackvelvete:blackvelvete2580@cluster0.jyvmy.mongodb.net/Snack-blog";
 mongoose
-  .connect(mongoURL)
+  .connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => app.listen(3000))
   .catch((err) => console.log(err));
 
@@ -56,21 +56,19 @@ app.post("/blogs", (req, res) => {
     });
 });
 
-app.get("/blogs/create", (req, res) => {
-  res.render("create", { title: "Create a new blog" });
-});
-
 app.get("/blogs/:id", (req, res) => {
   const id = req.params.id;
-  console.log(req.params.id);
-
   Blog.findById(id)
     .then((result) => {
-      res.render("details", { blog: result, title: "Blog details" });
+      res.render("details", { blog: result, title: "Blog Details" });
     })
     .catch((err) => {
       console.log(err);
     });
+});
+
+app.get("/blogs/create", (req, res) => {
+  res.render("create", { title: "Create a new blog" });
 });
 
 // 404 page
