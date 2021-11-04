@@ -14,15 +14,15 @@ mongoose
 
 // register view engine
 app.set("view engine", "ejs");
-// app.set('views', 'myviews');
+
 
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
-// app.use((req, res, next) => {
-//   res.locals.path = req.path;
-//   next();
-// });
+app.use((req, res, next) => {
+  res.locals.path = req.path;
+  next();
+});
 
 app.get("/", (req, res) => {
   res.redirect("/blogs");
@@ -62,7 +62,7 @@ app.post("/blogs", (req, res) => {
 
 app.get("/blogs/:id", (req, res) => {
   const id = req.params.id;
-  Blog.findByIdAndUpdate(id)
+  Blog.findById(id)
     .then((result) => {
       res.render("details", { blog: result, title: "Blog Details" });
     })
